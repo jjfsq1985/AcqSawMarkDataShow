@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LogicConfig xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <isDebug>false</isDebug>
+  <laserConfigFile>F:\work\YF\Algorithm\WaferSorterYF\SRC\WaferSorterAlgorithm\SawMark\SawMarkTest\bin\Debug\Config\LaserConfig.xml</laserConfigFile>
+  <calculateConfigFile>F:\work\YF\Algorithm\WaferSorterYF\SRC\WaferSorterAlgorithm\SawMark\SawMarkTest\bin\Debug\Config\AlgorithmConfig.xml</calculateConfigFile>
+  <plcConfigFile>F:\work\YF\Algorithm\WaferSorterYF\SRC\WaferSorterAlgorithm\SawMark\SawMarkTest\bin\Debug\Config\ADSConfig.xml</plcConfigFile>
+  <serverConfigFile>F:\work\YF\Algorithm\WaferSorterYF\SRC\WaferSorterAlgorithm\SawMark\SawMarkTest\bin\Debug\Config\ServerConfig.xml</serverConfigFile>
+  <outputFile>E:\Output\</outputFile>
+  <dataSaveDays>7</dataSaveDays>
+  <isShield>false</isShield>
+  <isSaveOrg>true</isSaveOrg>
+  <isOutputInfolog>true</isOutputInfolog>
+  <GetIdTimeLimit>500</GetIdTimeLimit>
+  <GetLaserDataTimeLimit>1000</GetLaserDataTimeLimit>
+  <ProcessTimeLimit>5000</ProcessTimeLimit>
+</LogicConfig>

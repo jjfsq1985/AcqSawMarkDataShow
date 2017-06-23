@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SawMarkAlgParams xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <LambdaC1>0.8</LambdaC1>
+  <LambdaC2>0.125</LambdaC2>
+  <LambdaS>0.08</LambdaS>
+  <Fs>150000</Fs>
+  <SawMarkWindowSize>5</SawMarkWindowSize>
+  <SmallSawMarkWindowSize>1</SmallSawMarkWindowSize>
+  <WindowOverlap>0.85</WindowOverlap>
+  <WorkAreaStart>5</WorkAreaStart>
+  <WorkAreaEnd>5</WorkAreaEnd>
+  <DataLimitMin>-3</DataLimitMin>
+  <DataLimitMax>3</DataLimitMax>
+  <DisFromProbeToWaferBound>8</DisFromProbeToWaferBound>
+  <ProbeDiameter>0.025</ProbeDiameter>
+  <Probe1Base>-0.2325</Probe1Base>
+  <Probe2Base>0.0542</Probe2Base>
+  <Probe3Base>-0.1717</Probe3Base>
+  <Probe4Base>0.0002</Probe4Base>
+  <Probe5Base>-0.2668</Probe5Base>
+  <Probe6Base>0.0103</Probe6Base>
+  <ProbePair1ThOffset>-53.227</ProbePair1ThOffset>
+  <ProbePair2ThOffset>-38.1312</ProbePair2ThOffset>
+  <ProbePair3ThOffset>-46.8544</ProbePair3ThOffset>
+  <MeasurePosNumber>25</MeasurePosNumber>
+  <MeasurePosDiameter>5</MeasurePosDiameter>
+  <ResampleRate>1</ResampleRate>
+  <MonitorLimitForBrokenPieces>8</MonitorLimitForBrokenPieces>
+  <MonitorLimitForOverlapPieces>5</MonitorLimitForOverlapPieces>
+</SawMarkAlgParams>

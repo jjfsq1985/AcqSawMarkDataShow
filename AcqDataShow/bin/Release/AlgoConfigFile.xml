@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ConfigFileContent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <AlgoConfigFilePath>F:\work\AcqDataShow\AcqDataShow\bin\Release\AlgoFiles\AlgoConfig.xml</AlgoConfigFilePath>
+  <AlgoParamsFileFolder>F:\work\AcqDataShow\AcqDataShow\bin\Release\AlgoFiles\AlgoParamFiles\</AlgoParamsFileFolder>
+</ConfigFileContent>

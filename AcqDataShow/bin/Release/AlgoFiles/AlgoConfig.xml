@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AlgoConfigFileContent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <CurrentSpecName>Test0328</CurrentSpecName>
+  <ListSpecNameToParam>
+    <SpecNameToAlgoParamFile>
+      <SpecName>Wafer-156-S-Mul</SpecName>
+      <ParamFileName>default_AlgoParams.xml</ParamFileName>
+    </SpecNameToAlgoParamFile>
+    <SpecNameToAlgoParamFile>
+      <SpecName>Wafer-156-S-Mulaaa</SpecName>
+      <ParamFileName>default_AlgoParams.xml</ParamFileName>
+    </SpecNameToAlgoParamFile>
+    <SpecNameToAlgoParamFile>
+      <SpecName>Wafer-156-S-Mul - 副本</SpecName>
+      <ParamFileName>default_AlgoParams.xml</ParamFileName>
+    </SpecNameToAlgoParamFile>
+    <SpecNameToAlgoParamFile>
+      <SpecName>Test</SpecName>
+      <ParamFileName>default_AlgoParams.xml</ParamFileName>
+    </SpecNameToAlgoParamFile>
+    <SpecNameToAlgoParamFile>
+      <SpecName>Test0328</SpecName>
+      <ParamFileName>default_AlgoParams.xml</ParamFileName>
+    </SpecNameToAlgoParamFile>
+  </ListSpecNameToParam>
+</AlgoConfigFileContent>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SQLConfig xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <serverName>100.168.0.105</serverName>
+  <sqlName>WaferSort</sqlName>
+  <userName>sa</userName>
+  <userPw>2017</userPw>  
+</SQLConfig>

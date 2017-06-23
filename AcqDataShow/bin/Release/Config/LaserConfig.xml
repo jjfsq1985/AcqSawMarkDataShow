@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LaserConfig xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <channelsName>
+    <string>Dev1/ai0</string>
+    <string>Dev1/ai1</string>
+    <string>Dev1/ai2</string>
+    <string>Dev1/ai3</string>
+    <string>Dev1/ai4</string>
+    <string>Dev1/ai5</string>
+  </channelsName>
+  <triggerName>/Dev1/PFI1</triggerName>
+  <filterPluseWidth>0.00008</filterPluseWidth>
+  <rate>150000</rate>
+  <dataNum>90000</dataNum>
+  <volMin>-10</volMin>
+  <volMax>10</volMax>
+  <disMin>-3</disMin>
+  <disMax>3</disMax>
+</LaserConfig>

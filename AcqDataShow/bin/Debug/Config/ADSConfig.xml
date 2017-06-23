@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PLCConfig xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <adsID>5.40.233.214.1.1</adsID>
+  <srvPort>851</srvPort>
+  <isRemotMode>true</isRemotMode>
+</PLCConfig>
