@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.IO;
 using System.Collections;
+using System.Reflection;
 
 namespace AcqDataShow
 {
@@ -34,13 +35,6 @@ namespace AcqDataShow
         public static extern bool WarpCalProcess(double[,] probeDatasIn, int probeDataLenIn, int probeNumIn, ref int errorFlagOut,
             StringBuilder errorInfoOut, int errorInfoSizeMax, ref bool warnFlagOut, StringBuilder warnInfoOut, int warnInfoSizeMax,
             double[] warpDataOut, int numProbePairsIn);
-
-
-        [DllImport("SawMarkStationCoreCPP.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool polyFit(double[] probeDatasIn, int probeDataLenIn, int PolyN, double[] dbCoefOut);
-
-        [DllImport("SawMarkStationCoreCPP.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern double polyFitGetY(double[] dbCoef, int nCoefCount, double dbX);
 
         #endregion
 
@@ -193,6 +187,7 @@ namespace AcqDataShow
             {
                 return false;
             }
+            return true;
         }
         public bool CalProcess(object source, out GropResults results, out object dataShow)
         {
@@ -218,37 +213,54 @@ namespace AcqDataShow
             results.DataResults[0] = new CalResult();
             results.DataResults[0].calType = CalType.SawMarkSM;
             results.DataResults[0].processData = new ResultType[0];
-            results.DataResults[0].result = new ResultType[19];
-            results.DataResults[0].result[0].name = "SawMarkNum";
-            results.DataResults[0].result[0].remark = "线痕个数";
+            results.DataResults[0].result = new ResultType[43];
+            results.DataResults[0].result[0].name = "SawMarkType";
+            results.DataResults[0].result[0].remark = "线痕类型";
             results.DataResults[0].result[0].value = -1;
             results.DataResults[0].result[1].name = "SawMarkDepthMax";
             results.DataResults[0].result[1].remark = "最大线痕深度";
             results.DataResults[0].result[1].value = -1;
-            for (int ni = 0; ni < 6; ni++)
+            results.DataResults[0].result[2].name = "SawMarkDepthMaxPeakPos";
+            results.DataResults[0].result[2].remark = "最大线痕波峰位置";
+            results.DataResults[0].result[2].value = -1;
+            results.DataResults[0].result[3].name = "SawMarkDepthMaxValleryPos";
+            results.DataResults[0].result[3].remark = "最大线痕波谷位置";
+            results.DataResults[0].result[3].value = -1;
+            results.DataResults[0].result[4].name = "SawMarkDepthMaxPeakVal";
+            results.DataResults[0].result[4].remark = "最大线痕波峰值";
+            results.DataResults[0].result[4].value = -1;
+            results.DataResults[0].result[5].name = "SawMarkDepthMaxValleryVal";
+            results.DataResults[0].result[5].remark = "最大线痕波谷值";
+            results.DataResults[0].result[5].value = -1;
+            results.DataResults[0].result[6].name = "SawMarkDepthMaxProbeIndex";
+            results.DataResults[0].result[6].remark = "最大线痕探头号";
+            results.DataResults[0].result[6].value = -1;
+            int nProbeCount = 6;
+            int nDataPerProbe = 6; //每个探头6种数据
+            for (int ni = 0; ni < nProbeCount; ni++)
             {
-                results.DataResults[0].result[2 * ni + 2].name = "SawMarkNumForProbe" + (ni + 1).ToString();
-                results.DataResults[0].result[2 * ni + 2].remark = "探头" + (ni + 1).ToString() + "线痕个数";
-                results.DataResults[0].result[2 * ni + 2].value = -1;
-                results.DataResults[0].result[2 * ni + 1 + 2].name = "SawMarkDepthMaxForProbe" + (ni + 1).ToString();
-                results.DataResults[0].result[2 * ni + 1 + 2].remark = "探头" + (ni + 1).ToString() + "线痕深度";
-                results.DataResults[0].result[2 * ni + 1 + 2].value = -1;
+                results.DataResults[0].result[nDataPerProbe * ni + 7].name = "SawMarkNumForProbe" + (ni + 1).ToString();
+                results.DataResults[0].result[nDataPerProbe * ni + 7].remark = "探头" + (ni + 1).ToString() + "线痕个数";
+                results.DataResults[0].result[nDataPerProbe * ni + 7].value = -1;
+                results.DataResults[0].result[nDataPerProbe * ni + 8].name = "SawMarkDepthMaxForProbe" + (ni + 1).ToString();
+                results.DataResults[0].result[nDataPerProbe * ni + 8].remark = "探头" + (ni + 1).ToString() + "线痕深度";
+                results.DataResults[0].result[nDataPerProbe * ni + 8].value = -1;
+
+                results.DataResults[0].result[nDataPerProbe * ni + 9].name = "SawMarkDepthMaxPeakPosForProbe" + (ni + 1).ToString();
+                results.DataResults[0].result[nDataPerProbe * ni + 9].remark = "探头" + (ni + 1).ToString() + "最大波峰位置";
+                results.DataResults[0].result[nDataPerProbe * ni + 9].value = -1;
+                results.DataResults[0].result[nDataPerProbe * ni + 10].name = "SawMarkDepthMaxValleryPosForProbe" + (ni + 1).ToString();
+                results.DataResults[0].result[nDataPerProbe * ni + 10].remark = "探头" + (ni + 1).ToString() + "最大波谷位置";
+                results.DataResults[0].result[nDataPerProbe * ni + 10].value = -1;
+
+                results.DataResults[0].result[nDataPerProbe * ni + 11].name = "SawMarkDepthMaxPeakValForProbe" + (ni + 1).ToString();
+                results.DataResults[0].result[nDataPerProbe * ni + 11].remark = "探头" + (ni + 1).ToString() + "最大波峰值";
+                results.DataResults[0].result[nDataPerProbe * ni + 11].value = -1;
+                results.DataResults[0].result[nDataPerProbe * ni + 12].name = "SawMarkDepthMaxValleryValForProbe" + (ni + 1).ToString();
+                results.DataResults[0].result[nDataPerProbe * ni + 12].remark = "探头" + (ni + 1).ToString() + "最大波谷值";
+                results.DataResults[0].result[nDataPerProbe * ni + 12].value = -1;
+
             }
-            results.DataResults[0].result[14].name = "SawMarkDepthMaxPeakPos";
-            results.DataResults[0].result[14].remark = "最大线痕波峰位置";
-            results.DataResults[0].result[14].value = -1;
-            results.DataResults[0].result[15].name = "SawMarkDepthMaxValleryPos";
-            results.DataResults[0].result[15].remark = "最大线痕波谷位置";
-            results.DataResults[0].result[15].value = -1;
-            results.DataResults[0].result[16].name = "SawMarkDepthMaxPeakVal";
-            results.DataResults[0].result[16].remark = "最大线痕波峰值";
-            results.DataResults[0].result[16].value = -1;
-            results.DataResults[0].result[17].name = "SawMarkDepthMaxValleryVal";
-            results.DataResults[0].result[17].remark = "最大线痕波谷值";
-            results.DataResults[0].result[17].value = -1;
-            results.DataResults[0].result[18].name = "SawMarkDepthMaxProbeIndex";
-            results.DataResults[0].result[18].remark = "最大线痕探头号";
-            results.DataResults[0].result[18].value = -1;
 
             results.DataResults[1] = new CalResult();
             results.DataResults[1].calType = CalType.ThicknessSM;
@@ -311,10 +323,12 @@ namespace AcqDataShow
             int gradeNumAll;
             if (!specParams.GetGradeNumAll(out gradeNumAll))
             {
+                //LogHelper.ErrorLog("SawMarkAlgError: 获取等级数出错; error at GetGradeNumAll", null);
                 return false;
             }
             if (gradeNumAll <= 0)
             {
+                //LogHelper.ErrorLog("SawMarkAlgError: 等级数小于0; error gradeNum:" + gradeNumAll, null);
                 return false;
             }
             results.ClassifyResult = new bool[4, gradeNumAll];
@@ -325,6 +339,7 @@ namespace AcqDataShow
 
             if ((probeNum <= 0) || (probeDataLen <= 0))
             {
+                //LogHelper.ErrorLog("SawMarkAlgError: CalProcess输入不合法; error input for CalProcess", null);
                 return false;
             }
 
@@ -351,6 +366,7 @@ namespace AcqDataShow
                     if (calResultTable.ContainsKey(nameThreadSawMark))
                     {
                         results.ValidResult = ValidType.CalError;
+                        //LogHelper.ErrorLog("SawMarkAlgError: 重复创建SawMark计算线程;thread name:" + nameThreadSawMark, null);
                         return false;
                     }
                     calResultMutex.WaitOne();
@@ -381,6 +397,7 @@ namespace AcqDataShow
                     if (calResultTable.ContainsKey(nameThreadThickness))
                     {
                         results.ValidResult = ValidType.CalError;
+                        //LogHelper.ErrorLog("SawMarkAlgError: 重复创建Thickness计算线程;thread name:" + nameThreadThickness, null);
                         return false;
                     }
                     calResultMutex.WaitOne();
@@ -411,6 +428,7 @@ namespace AcqDataShow
                     if (calResultTable.ContainsKey(nameThreadWarp))
                     {
                         results.ValidResult = ValidType.CalError;
+                        //LogHelper.ErrorLog("SawMarkAlgError: 重复创建Warp计算线程;thread name:" + nameThreadWarp, null);
                         return false;
                     }
                     calResultMutex.WaitOne();
@@ -485,22 +503,27 @@ namespace AcqDataShow
                     {
                         currentTime = System.DateTime.Now;
                         ts = currentTime.Subtract(startTime);
-                        if (ts.TotalMilliseconds > 2000)
+                        if (ts.TotalMilliseconds > 5000)
                         {
                             if (threadSawMarkRunning)
                             {
                                 threadCalSawMark.Abort();
+                                //LogHelper.ErrorLog("SawMarkAlgError: 线痕计算超时; time out,startTime:" + startTime.ToShortTimeString() + ",currentTime:" + currentTime.ToShortTimeString(), null);
                             }
                             if (threadThicknessRunning)
                             {
                                 threadCalThickness.Abort();
+                                //LogHelper.ErrorLog("SawMarkAlgError: 厚度计算超时; time out,startTime:" + startTime.ToShortTimeString() + ",currentTime:" + currentTime.ToShortTimeString(), null);
                             }
                             if (threadWarpRunning)
                             {
                                 threadCalWarp.Abort();
+                                //LogHelper.ErrorLog("SawMarkAlgError: 翘曲计算超时; time out,startTime:" + startTime.ToShortTimeString() + ",currentTime:" + currentTime.ToShortTimeString(), null);
                             }
                             results.ValidResult = ValidType.Timeout;
                             return false;
+
+                            Thread.Sleep(80);
                         }
                         else
                         {
@@ -525,16 +548,19 @@ namespace AcqDataShow
                     if (!calResultTable.ContainsKey(nameThreadSawMark))
                     {
                         results.ValidResult = ValidType.CalError;
+                        //LogHelper.ErrorLog("SawMarkAlgError: 取线痕计算结果时线程不存在;thread name:" + nameThreadSawMark, null);
                         return false;
                     }
                     if (!calResultTable.ContainsKey(nameThreadThickness))
                     {
                         results.ValidResult = ValidType.CalError;
+                        //LogHelper.ErrorLog("SawMarkAlgError: 取厚度计算结果时线程不存在;thread name:" + nameThreadThickness, null);
                         return false;
                     }
                     if (!calResultTable.ContainsKey(nameThreadWarp))
                     {
                         results.ValidResult = ValidType.CalError;
+                        //LogHelper.ErrorLog("SawMarkAlgError: 取翘曲计算结果时线程不存在;thread name:" + nameThreadWarp, null);
                         return false;
                     }
 
@@ -542,7 +568,18 @@ namespace AcqDataShow
                     resultThickness = (ThreadThicknessResult)calResultTable[nameThreadThickness];
                     resultWarp = (ThreadWarpResult)calResultTable[nameThreadWarp];
 
-
+                    if (resultSawMark.warnFlag)
+                    {
+                        //LogHelper.InfoLog("SawMarkAlgWarn: 线痕计算报警; warnInfo for SawMark Calculation：" + resultSawMark.warnInfo);
+                    }
+                    if (resultThickness.warnFlag)
+                    {
+                        //LogHelper.InfoLog("SawMarkAlgWarn: 厚度计算报警; warnInfo for Thickness Calculation：" + resultThickness.warnInfo);
+                    }
+                    if (resultWarp.warnFlag)
+                    {
+                        //LogHelper.InfoLog("SawMarkAlgWarn: 翘曲计算报警; warnInfo for Warp Calculation：" + resultWarp.warnInfo);
+                    }
 
                     #region  step8.1: ValidResult 赋值
 
@@ -591,57 +628,6 @@ namespace AcqDataShow
                     #endregion
 
                     #region step8.2: ClassifyResult 赋值
-
-                    #region 判断是否要检线痕
-
-                    if (specParams.IsInTestItems(CalType.SawMarkSM))
-                    {
-                        for (int ni = 0; ni < gradeNumAll; ni++)            // 每个等级数满足要求的线痕数有多少
-                        {
-                            int sawMarkNumGradeNi = 0;
-                            int smallSawMarkNumGradeNi = 0;
-
-                            for (int nk = 0; nk < resultSawMark.sawMarkNum; nk++)
-                            {
-                                switch (resultSawMark.sawMarkInfos[nk].type)
-                                {
-                                    case 0:
-                                        if ((resultSawMark.sawMarkInfos[nk].depthMax > specParams.SawMarkDepthMin[ni]) && (resultSawMark.sawMarkInfos[nk].depthMax < specParams.SawMarkDepthMax[ni]))
-                                        {
-                                            sawMarkNumGradeNi++;
-                                        }
-                                        break;
-                                    case 1:
-                                        if ((resultSawMark.sawMarkInfos[nk].depthMax > specParams.SmallSawMarkDepthMin[ni]) && (resultSawMark.sawMarkInfos[nk].depthMax < specParams.SmallSawMarkDepthMax[ni]))
-                                        {
-                                            smallSawMarkNumGradeNi++;
-                                        }
-                                        break;
-                                    default:
-                                        break;
-                                }
-                            }
-                            // 根据数目判断等级
-                            if ((sawMarkNumGradeNi <= specParams.SawMarkNumMax[ni]) && (smallSawMarkNumGradeNi <= specParams.SmallSawMarkNumMax[ni]))
-                            {
-                                results.ClassifyResult[0, ni] = true;
-                            }
-                            else
-                            {
-                                results.ClassifyResult[0, ni] = false;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        for (int ni = 0; ni < gradeNumAll; ni++)
-                        {
-                            results.ClassifyResult[0, ni] = true;
-                        }
-                    }
-
-
-                    #endregion
 
                     #region 判断是否要检平均厚度
 
@@ -809,70 +795,6 @@ namespace AcqDataShow
 
                     #region step8.3: DataResult.result 和 DataResult.processData  赋值
 
-                    #region 判断是否要检线痕
-
-                    if (specParams.IsInTestItems(CalType.SawMarkSM))
-                    {
-                        // result
-                        double maxDepthOfAllProbes = resultSawMark.sawMarkInfos[0].depthMax;
-                        double dbPeakPos = resultSawMark.sawMarkInfos[0].peakPos;
-                        double dbValleyPos = resultSawMark.sawMarkInfos[0].valleyPos;
-                        double dbPeakVal = resultSawMark.sawMarkInfos[0].peakValue;
-                        double dbValleyVal = resultSawMark.sawMarkInfos[0].valleyValue;
-                        int nProbeIndex = resultSawMark.sawMarkInfos[0].probeIndex;
-                        for (int nk = 0; nk < resultSawMark.sawMarkNum; nk++)
-                        {
-                            if (resultSawMark.sawMarkInfos[nk].depthMax > maxDepthOfAllProbes)
-                            {
-                                maxDepthOfAllProbes = resultSawMark.sawMarkInfos[nk].depthMax;
-                                dbPeakPos = resultSawMark.sawMarkInfos[nk].peakPos;
-                                dbValleyPos = resultSawMark.sawMarkInfos[nk].valleyPos;
-                                dbPeakVal = resultSawMark.sawMarkInfos[nk].peakValue;
-                                dbValleyVal = resultSawMark.sawMarkInfos[nk].valleyValue;
-                                nProbeIndex = resultSawMark.sawMarkInfos[nk].probeIndex;
-                            }
-                        }
-                        results.DataResults[0].result[0].value = resultSawMark.sawMarkNum;            // 总线痕个数
-                        results.DataResults[0].result[1].value = maxDepthOfAllProbes;                 // 最大线痕深度
-                        results.DataResults[0].result[14].value = dbPeakPos;
-                        results.DataResults[0].result[15].value = dbValleyPos;
-                        results.DataResults[0].result[16].value = dbPeakVal;
-                        results.DataResults[0].result[17].value = dbValleyVal;
-                        results.DataResults[0].result[18].value = nProbeIndex+1;
-
-                        for (int ni = 0; ni < probeNum; ni++)
-                        {
-                            bool initFlag = true;
-                            double maxDepthOfProbeNi = 0;
-                            int numSawMarkOfProbeNi = 0;
-
-                            for (int nk = 0; nk < resultSawMark.sawMarkNum; nk++)
-                            {
-                                if (ni == resultSawMark.sawMarkInfos[nk].probeIndex)
-                                {
-                                    numSawMarkOfProbeNi++;
-                                    if (initFlag)
-                                    {
-                                        maxDepthOfProbeNi = resultSawMark.sawMarkInfos[nk].depthMax;
-                                        initFlag = false;
-                                    }
-                                    else
-                                    {
-                                        if (resultSawMark.sawMarkInfos[nk].depthMax > maxDepthOfProbeNi)
-                                        {
-                                            maxDepthOfProbeNi = resultSawMark.sawMarkInfos[nk].depthMax;
-                                        }
-                                    }
-                                }
-                            }
-                            results.DataResults[0].result[2 * ni + 2].value = numSawMarkOfProbeNi;         // 每探头线痕数
-                            results.DataResults[0].result[2 * ni + 1 + 2].value = maxDepthOfProbeNi;       // 每探头最大线痕深度
-                        }
-
-                        // processData 为空
-                    }
-                    #endregion
-
                     #region 判断是否要检平均厚度
 
                     if (specParams.IsInTestItems(CalType.ThicknessSM))
@@ -923,7 +845,7 @@ namespace AcqDataShow
                     #endregion
 
                     #region 判断是否要检TTV
-
+                    double dblTotalTTV = 0;
                     if (specParams.IsInTestItems(CalType.TTVSM))
                     {
                         double maxOfAllValidThickness = 0;
@@ -993,7 +915,161 @@ namespace AcqDataShow
                             results.DataResults[2].result[3 * ni + 2 + 1].value = minOfProbePairNi;
                         }
                         // processData 为空
+
+                        dblTotalTTV = results.DataResults[2].result[0].value;
                     }
+
+                    #endregion
+
+                    #region 判断是否要检线痕
+
+                    if (specParams.IsInTestItems(CalType.SawMarkSM))
+                    {
+                        //计算线痕值
+                        double dbMaxMin = Math.Abs(resultSawMark.sawMarkInfos[0].peakValue - resultSawMark.sawMarkInfos[0].valleyValue) * 1000.0;
+                        double maxDepthOfAllProbes = GetRegressSawmark(resultSawMark.sawMarkInfos[0].depthMax, dblTotalTTV, dbMaxMin, resultSawMark.sawMarkInfos[0].type);
+                        int nType = resultSawMark.sawMarkInfos[0].type;
+                        double dbPeakPos = resultSawMark.sawMarkInfos[0].peakPos;
+                        double dbValleyPos = resultSawMark.sawMarkInfos[0].valleyPos;
+                        double dbPeakVal = resultSawMark.sawMarkInfos[0].peakValue;
+                        double dbValleyVal = resultSawMark.sawMarkInfos[0].valleyValue;
+                        int nProbeIndex = resultSawMark.sawMarkInfos[0].probeIndex;
+                        for (int nk = 0; nk < resultSawMark.sawMarkNum; nk++)
+                        {
+                            dbMaxMin = Math.Abs(resultSawMark.sawMarkInfos[nk].peakValue - resultSawMark.sawMarkInfos[nk].valleyValue) * 1000.0;
+                            double dbRealSawMark = GetRegressSawmark(resultSawMark.sawMarkInfos[nk].depthMax, dblTotalTTV, dbMaxMin, resultSawMark.sawMarkInfos[nk].type);
+                            resultSawMark.sawMarkInfos[nk].depthMax = dbRealSawMark;//修改线痕值
+                            if (dbRealSawMark > maxDepthOfAllProbes)
+                            {
+                                maxDepthOfAllProbes = dbRealSawMark;
+                                nType = resultSawMark.sawMarkInfos[nk].type;
+                                dbPeakPos = resultSawMark.sawMarkInfos[nk].peakPos;
+                                dbValleyPos = resultSawMark.sawMarkInfos[nk].valleyPos;
+                                dbPeakVal = resultSawMark.sawMarkInfos[nk].peakValue;
+                                dbValleyVal = resultSawMark.sawMarkInfos[nk].valleyValue;
+                                nProbeIndex = resultSawMark.sawMarkInfos[nk].probeIndex;
+                            }
+                        }
+                        results.DataResults[0].result[0].value = nType;            // 线痕种类
+                        results.DataResults[0].result[1].value = maxDepthOfAllProbes;                 // 最大线痕深度
+                        results.DataResults[0].result[2].value = dbPeakPos;
+                        results.DataResults[0].result[3].value = dbValleyPos;
+                        results.DataResults[0].result[4].value = dbPeakVal;
+                        results.DataResults[0].result[5].value = dbValleyVal;
+                        results.DataResults[0].result[6].value = nProbeIndex + 1;
+
+                        for (int ni = 0; ni < probeNum; ni++)
+                        {
+                            bool initFlag = true;
+                            double maxDepthOfProbeNi = 0;
+                            int numSawMarkOfProbeNi = 0;
+                            double maxPeakDepthPos = 0;
+                            double maxValleyDepthPos = 0;
+                            double maxPeakDepthVal = 0;
+                            double maxValleyDepthVal = 0;
+
+                            for (int nk = 0; nk < resultSawMark.sawMarkNum; nk++)
+                            {
+                                if (ni == resultSawMark.sawMarkInfos[nk].probeIndex)
+                                {
+                                    numSawMarkOfProbeNi++;
+                                    if (initFlag)
+                                    {
+                                        maxDepthOfProbeNi = resultSawMark.sawMarkInfos[nk].depthMax;
+                                        maxPeakDepthPos = resultSawMark.sawMarkInfos[nk].peakPos;
+                                        maxValleyDepthPos = resultSawMark.sawMarkInfos[nk].valleyPos;
+                                        maxPeakDepthVal = resultSawMark.sawMarkInfos[nk].peakValue;
+                                        maxValleyDepthVal = resultSawMark.sawMarkInfos[nk].valleyValue;
+                                        initFlag = false;
+                                    }
+                                    else
+                                    {
+                                        if (resultSawMark.sawMarkInfos[nk].depthMax > maxDepthOfProbeNi)
+                                        {
+                                            maxDepthOfProbeNi = resultSawMark.sawMarkInfos[nk].depthMax;
+                                            maxPeakDepthPos = resultSawMark.sawMarkInfos[nk].peakPos;
+                                            maxValleyDepthPos = resultSawMark.sawMarkInfos[nk].valleyPos;
+                                            maxPeakDepthVal = resultSawMark.sawMarkInfos[nk].peakValue;
+                                            maxValleyDepthVal = resultSawMark.sawMarkInfos[nk].valleyValue;
+                                        }
+                                    }
+                                }
+                            }
+                            results.DataResults[0].result[6 * ni + 7].value = numSawMarkOfProbeNi;         // 每探头线痕数
+                            results.DataResults[0].result[6 * ni + 8].value = maxDepthOfProbeNi;       // 每探头最大线痕深度
+                            results.DataResults[0].result[6 * ni + 9].value = maxPeakDepthPos;         // 峰位置
+                            results.DataResults[0].result[6 * ni + 10].value = maxValleyDepthPos;       // 谷位置
+                            results.DataResults[0].result[6 * ni + 11].value = maxPeakDepthVal;         // 峰值
+                            results.DataResults[0].result[6 * ni + 12].value = maxValleyDepthVal;       // 谷值
+                        }
+
+                        // processData 为空
+                    }
+                    #endregion
+
+                    #region 判断线痕分类等级
+
+                    if (specParams.IsInTestItems(CalType.SawMarkSM))
+                    {
+                        //最大线痕
+                        double dbSawMarkMax = 0;
+                        double dbsmallSawMarkMax = 0;
+                        for (int nk = 0; nk < resultSawMark.sawMarkNum; nk++)
+                        {
+                            switch (resultSawMark.sawMarkInfos[nk].type)
+                            {
+                                case 0:
+                                    {
+                                        if (resultSawMark.sawMarkInfos[nk].depthMax > dbSawMarkMax)
+                                        {
+                                            dbSawMarkMax = resultSawMark.sawMarkInfos[nk].depthMax;
+                                        }
+                                    }
+                                    break;
+                                case 1:
+                                    {
+                                        if (resultSawMark.sawMarkInfos[nk].depthMax > dbsmallSawMarkMax)
+                                        {
+                                            dbsmallSawMarkMax = resultSawMark.sawMarkInfos[nk].depthMax;
+                                        }
+                                    }
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        //判断是否符合各个等级的规则
+                        for (int ni = 0; ni < gradeNumAll; ni++)
+                        {
+                            int sawMarkNumGradeNi = 0;
+                            int smallSawMarkNumGradeNi = 0;
+                            if ((dbSawMarkMax > specParams.SawMarkDepthMin[ni]) && (dbSawMarkMax < specParams.SawMarkDepthMax[ni]))
+                            {
+                                sawMarkNumGradeNi++;
+                            }
+                            if ((dbsmallSawMarkMax > specParams.SmallSawMarkDepthMin[ni]) && (dbsmallSawMarkMax < specParams.SmallSawMarkDepthMax[ni]))
+                            {
+                                smallSawMarkNumGradeNi++;
+                            }
+                            //由数目判断等级（只有0和1的判断）
+                            if ((sawMarkNumGradeNi <= specParams.SawMarkNumMax[ni]) && (smallSawMarkNumGradeNi <= specParams.SmallSawMarkNumMax[ni]))
+                            {
+                                results.ClassifyResult[0, ni] = true;
+                            }
+                            else
+                            {
+                                results.ClassifyResult[0, ni] = false;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (int ni = 0; ni < gradeNumAll; ni++)
+                        {
+                            results.ClassifyResult[0, ni] = true;
+                        }
+                    }
+
 
                     #endregion
 
@@ -1052,6 +1128,7 @@ namespace AcqDataShow
                 }
                 catch (Exception ex)
                 {
+                    //LogHelper.ErrorLog("SawMarkAlgError: 计算发生未知错误; error at CalProcess", ex);
                     if (results.ValidResult == ValidType.Normal)
                     {
                         results.ValidResult = ValidType.CalError;
@@ -1063,16 +1140,19 @@ namespace AcqDataShow
                 if (!calResultTable.ContainsKey(nameThreadSawMark))
                 {
                     results.ValidResult = ValidType.CalError;
+                    //LogHelper.ErrorLog("SawMarkAlgError: 移除线痕计算结果时线程不存在;thread name:" + nameThreadSawMark, null);
                     return false;
                 }
                 if (!calResultTable.ContainsKey(nameThreadThickness))
                 {
                     results.ValidResult = ValidType.CalError;
+                    //LogHelper.ErrorLog("SawMarkAlgError: 移除厚度计算结果时线程不存在;thread name:" + nameThreadThickness, null);
                     return false;
                 }
                 if (!calResultTable.ContainsKey(nameThreadWarp))
                 {
                     results.ValidResult = ValidType.CalError;
+                    //LogHelper.ErrorLog("SawMarkAlgError: 移除翘曲计算结果时线程不存在;thread name:" + nameThreadWarp, null);
                     return false;
                 }
 
@@ -1115,11 +1195,51 @@ namespace AcqDataShow
             catch (Exception excep)
             {
                 results.ValidResult = ValidType.CalError;
+                //LogHelper.ErrorLog("SawMarkAlgError: 计算发生未知错误; error at CalProcess", excep);
                 return false;
             }
         }
-        
-        
+
+        private double GetRegressSawmark(double dblSawMark, double dblTTV, double dbMaxMin, int nType)
+        {
+            return dblSawMark;
+            //if (dblSawMark < 1.0 || dblTTV < 1.0 || dbMaxMin < 1.0)
+            //    return dblSawMark;
+            //if (nType == 1)
+            //{
+            //    //密线的系数
+            //    const double dbCoef1 = 3.922892461;
+            //    const double dbCoef2 = 1.111257907;
+            //    const double dbCoef3 = -0.026012897;
+            //    const double dbCoef4 = 0.031345993;
+
+
+            //    double dbRegressSM = dbCoef1 + dbCoef2 * dblSawMark + dbCoef3 * dblTTV + dbCoef4 * dbMaxMin;
+            //    if (dbRegressSM <= 1.0 || dbRegressSM >= 300.0)
+            //        return dblSawMark;
+            //    else
+            //        return dbRegressSM > dbMaxMin ? dbMaxMin : dbRegressSM;
+            //}
+            //else
+            //{
+            //    //单一线痕的系数
+            //    const double dbCoef1 = 1.289359832;
+            //    const double dbCoef2 = 1.047318196;
+            //    const double dbCoef3 = 0.008967796;
+            //    const double dbCoef4 = 0.085059931;
+            //    double dbRegressSM = dbCoef1 + dbCoef2 * dblSawMark + dbCoef3 * dblTTV + dbCoef4 * dbMaxMin;
+            //    //特殊处理
+            //    if (dblSawMark > 6.5 && dblTTV < 20.0 && dbMaxMin / dblSawMark > 3.5)
+            //        dbRegressSM += 4.0;
+
+            //    if (dbRegressSM <= 1.0 || dbRegressSM >= 300.0)
+            //        return dblSawMark;
+            //    else
+            //        return dbRegressSM > dbMaxMin ? dbMaxMin : dbRegressSM;
+            //}
+
+         }
+
         public void CalMonitoring()
         {
             while (true)
@@ -1138,8 +1258,9 @@ namespace AcqDataShow
         }
         public string GetAbout()
         {
-            return "aa";
+            return "V" + Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
+
 
 
         #region my private 函数
@@ -1267,7 +1388,7 @@ namespace AcqDataShow
                 return;
             }
         }
-        public void ThreadSawMarkCalCoreMultiThread(object caldataIn)
+        private void ThreadSawMarkCalCoreMultiThread(object caldataIn)
         {
             ThreadSawMarkResult resultTemp;
 
@@ -1579,7 +1700,7 @@ namespace AcqDataShow
                     {
                         currentTime = System.DateTime.Now;
                         ts = currentTime.Subtract(startTime);
-                        if (ts.TotalMilliseconds > 1000)
+                        if (ts.TotalMilliseconds > 10000)
                         {
                             //if (threadSawMark_Probe_0_Running)
                             //{
@@ -1993,14 +2114,14 @@ namespace AcqDataShow
                 calResultMutexSawMark.WaitOne();
                 if ((null == calResultTableSawMark) || (null == threadName))
                 {
-                    //LogHelper.ErrorLog("SawMarkAlgError: ThreadSawMarkCalCoreForOneProbe内部出错,error at ThreadSawMarkCalCoreForOneProbe,illegal calResultTableSawMark or threadName", null);
+                    ////LogHelper.ErrorLog("SawMarkAlgError: ThreadSawMarkCalCoreForOneProbe内部出错,error at ThreadSawMarkCalCoreForOneProbe,illegal calResultTableSawMark or threadName", null);
                     calResultMutexSawMark.ReleaseMutex();
                     return;
                 }
 
                 if (!calResultTableSawMark.ContainsKey(threadName))
                 {
-                    //LogHelper.ErrorLog("SawMarkAlgError: ThreadSawMarkCalCoreForOneProbe内部出错,error at ThreadSawMarkCalCoreForOneProbe,threadName not in the list" + threadName, null);
+                    ////LogHelper.ErrorLog("SawMarkAlgError: ThreadSawMarkCalCoreForOneProbe内部出错,error at ThreadSawMarkCalCoreForOneProbe,threadName not in the list" + threadName, null);
                     calResultMutexSawMark.ReleaseMutex();
                     return;
                 }
@@ -2041,7 +2162,7 @@ namespace AcqDataShow
                     calResultTableSawMark[threadName] = resultTemp;
                     calResultMutexSawMark.ReleaseMutex();
 
-                    //LogHelper.ErrorLog("SawMarkAlgError: 线痕计算发生错误; error at ThreadSawMarkCalCore" + ",threadName:" + threadName + "errorInfo:" + errorInfo.ToString(), null);
+                    ////LogHelper.ErrorLog("SawMarkAlgError: 线痕计算发生错误; error at ThreadSawMarkCalCore" + ",threadName:" + threadName + "errorInfo:" + errorInfo.ToString(), null);
                     return;
                 }
 
@@ -2049,7 +2170,7 @@ namespace AcqDataShow
                 currentTime = System.DateTime.Now;
                 TimeSpan ts = currentTime.Subtract(startTime);
 
-                //LogHelper.InfoLog("SawMarkAlgTime: 线痕计算耗时; time for ThreadSawMarkCalCore " + ts.TotalMilliseconds.ToString() + " ms");
+                ////LogHelper.InfoLog("SawMarkAlgTime: 线痕计算耗时; time for ThreadSawMarkCalCore " + ts.TotalMilliseconds.ToString() + " ms");
 
                 #endregion
 
@@ -2114,12 +2235,12 @@ namespace AcqDataShow
                 calResultTableSawMark[threadName] = resultTemp;
                 calResultMutexSawMark.ReleaseMutex();
 
-                //LogHelper.ErrorLog("SawMarkAlgError: 线痕计算发生未知错误; error at ThreadSawMarkCalCore", excep);
+                ////LogHelper.ErrorLog("SawMarkAlgError: 线痕计算发生未知错误; error at ThreadSawMarkCalCore", excep);
                 return;
             }
 
         }
-        public void ThreadThicknessCalCore(object caldataIn)
+        private void ThreadThicknessCalCore(object caldataIn)
         {
             ThreadThicknessResult resultTemp;
 
@@ -2134,14 +2255,14 @@ namespace AcqDataShow
                 calResultMutex.WaitOne();
                 if ((null == calResultTable) || (null == threadName))
                 {
-                    //LogHelper.ErrorLog("SawMarkAlgError: ThreadThicknessCalCore内部出错,error at ThreadThicknessCalCore,illegal calResultTable or threadName", null);
+                    ////LogHelper.ErrorLog("SawMarkAlgError: ThreadThicknessCalCore内部出错,error at ThreadThicknessCalCore,illegal calResultTable or threadName", null);
                     calResultMutex.ReleaseMutex();
                     return;
                 }
 
                 if (!calResultTable.ContainsKey(threadName))
                 {
-                    //LogHelper.ErrorLog("SawMarkAlgError: ThreadThicknessCalCore内部出错,error at ThreadThicknessCalCore,threadName not in the list" + threadName, null);
+                    ////LogHelper.ErrorLog("SawMarkAlgError: ThreadThicknessCalCore内部出错,error at ThreadThicknessCalCore,threadName not in the list" + threadName, null);
                     calResultMutex.ReleaseMutex();
                     return;
                 }
@@ -2180,7 +2301,7 @@ namespace AcqDataShow
                     calResultTable[threadName] = resultTemp;
                     calResultMutex.ReleaseMutex();
 
-                    //LogHelper.ErrorLog("SawMarkAlgError: 厚度计算发生错误; error at ThreadThicknessCalCore" + ",threadName:" + threadName + "errorInfo:" + errorInfo.ToString(), null);
+                    ////LogHelper.ErrorLog("SawMarkAlgError: 厚度计算发生错误; error at ThreadThicknessCalCore" + ",threadName:" + threadName + "errorInfo:" + errorInfo.ToString(), null);
                     return;
                 }
 
@@ -2188,7 +2309,7 @@ namespace AcqDataShow
                 currentTime = System.DateTime.Now;
                 TimeSpan ts = currentTime.Subtract(startTime);
 
-                //LogHelper.InfoLog("SawMarkAlgTime: 厚度计算耗时; time for ThreadThicknessCalCore " + ts.TotalMilliseconds.ToString() + " ms");
+                ////LogHelper.InfoLog("SawMarkAlgTime: 厚度计算耗时; time for ThreadThicknessCalCore " + ts.TotalMilliseconds.ToString() + " ms");
 
                 #endregion
 
@@ -2241,11 +2362,11 @@ namespace AcqDataShow
                 calResultTable[threadName] = resultTemp;
                 calResultMutex.ReleaseMutex();
 
-                //LogHelper.ErrorLog("SawMarkAlgError: 厚度计算发生未知错误; error at ThreadThicknessCalCore", excep);
+                ////LogHelper.ErrorLog("SawMarkAlgError: 厚度计算发生未知错误; error at ThreadThicknessCalCore", excep);
                 return;
             }
         }
-        public void ThreadWarpCalCore(object caldataIn)
+        private void ThreadWarpCalCore(object caldataIn)
         {
             ThreadWarpResult resultTemp;
 
@@ -2260,14 +2381,14 @@ namespace AcqDataShow
                 calResultMutex.WaitOne();
                 if ((null == calResultTable) || (null == threadName))
                 {
-                    //LogHelper.ErrorLog("SawMarkAlgError: ThreadWarpCalCore内部出错,error at ThreadWarpCalCore,illegal calResultTable or threadName", null);
+                    ////LogHelper.ErrorLog("SawMarkAlgError: ThreadWarpCalCore内部出错,error at ThreadWarpCalCore,illegal calResultTable or threadName", null);
                     calResultMutex.ReleaseMutex();
                     return;
                 }
 
                 if (!calResultTable.ContainsKey(threadName))
                 {
-                    //LogHelper.ErrorLog("SawMarkAlgError: ThreadWarpCalCore内部出错,error at ThreadWarpCalCore,threadName not in the list" + threadName, null);
+                    ////LogHelper.ErrorLog("SawMarkAlgError: ThreadWarpCalCore内部出错,error at ThreadWarpCalCore,threadName not in the list" + threadName, null);
                     calResultMutex.ReleaseMutex();
                     return;
                 }
@@ -2304,7 +2425,7 @@ namespace AcqDataShow
                     calResultTable[threadName] = resultTemp;
                     calResultMutex.ReleaseMutex();
 
-                    //LogHelper.ErrorLog("SawMarkAlgError: 翘曲计算发生错误; error at ThreadWarpCalCore" + ",threadName:" + threadName + "errorInfo:" + errorInfo.ToString(), null);
+                    ////LogHelper.ErrorLog("SawMarkAlgError: 翘曲计算发生错误; error at ThreadWarpCalCore" + ",threadName:" + threadName + "errorInfo:" + errorInfo.ToString(), null);
                     return;
                 }
 
@@ -2312,7 +2433,7 @@ namespace AcqDataShow
                 currentTime = System.DateTime.Now;
                 TimeSpan ts = currentTime.Subtract(startTime);
 
-                //LogHelper.InfoLog("SawMarkAlgTime: 翘曲计算耗时; time for ThreadWarpCalCore " + ts.TotalMilliseconds.ToString() + " ms");
+                ////LogHelper.InfoLog("SawMarkAlgTime: 翘曲计算耗时; time for ThreadWarpCalCore " + ts.TotalMilliseconds.ToString() + " ms");
 
                 #endregion
 
@@ -2354,22 +2475,12 @@ namespace AcqDataShow
                 calResultTable[threadName] = resultTemp;
                 calResultMutex.ReleaseMutex();
 
-                //LogHelper.ErrorLog("SawMarkAlgError: 翘曲计算发生未知错误; error at ThreadWarpCalCore", excep);
+                ////LogHelper.ErrorLog("SawMarkAlgError: 翘曲计算发生未知错误; error at ThreadWarpCalCore", excep);
                 return;
             }
         }
 
         #endregion
-
-        public void SMpolyFit(double[] dbY, int nLen, int nPolyN, ref double[] dbCoefOut)
-        {
-            polyFit(dbY, nLen, nPolyN, dbCoefOut);
-        }
-
-        public double SMpolyFitGetY(double[] dbCoef,int nCount,double dbX)
-        {
-            return polyFitGetY(dbCoef, nCount, dbX);
-        }
 
     }
 
@@ -3515,6 +3626,7 @@ namespace AcqDataShow
                     return false;
             }
 
+            return true;
         }
 
     }
@@ -3635,7 +3747,7 @@ namespace AcqDataShow
                 #region 判断输入
                 if (par.Station != StationType.SawMark)
                 {
-                    //LogHelper.ErrorLog("SawMarkAlgError: SetParams出错,工站名不匹配" + par.Station.ToString(), null);
+                    ////LogHelper.ErrorLog("SawMarkAlgError: SetParams出错,工站名不匹配" + par.Station.ToString(), null);
                     return false;
                 }
                 #endregion
@@ -3688,7 +3800,7 @@ namespace AcqDataShow
                 int gradeNum;
                 if (!GetGradeNumAll(out gradeNum))
                 {
-                    //LogHelper.ErrorLog("SawMarkAlgError: SetParams出错,获取等级失败", null);
+                    ////LogHelper.ErrorLog("SawMarkAlgError: SetParams出错,获取等级失败", null);
                     return false;
                 }
 
@@ -3713,7 +3825,7 @@ namespace AcqDataShow
                 StringBuilder errorInfoForCPP = new StringBuilder(256);
                 if (!SawMarkSpecInit(specParamsForSawMark, specParamsForSawMark.GetLength(0), specParamsForSawMark.GetLength(1), errorInfoForCPP))
                 {
-                    //LogHelper.ErrorLog("SawMarkAlgError: SetParams出错,未知错误" + errorInfoForCPP.ToString(), null);
+                    ////LogHelper.ErrorLog("SawMarkAlgError: SetParams出错,未知错误" + errorInfoForCPP.ToString(), null);
                     return false;
                 }
 
@@ -3723,7 +3835,7 @@ namespace AcqDataShow
             }
             catch (Exception excep)
             {
-                //LogHelper.ErrorLog("SawMarkAlgError: SetParams出错,未知错误", excep);
+                ////LogHelper.ErrorLog("SawMarkAlgError: SetParams出错,未知错误", excep);
                 return false;
             }
         }
@@ -4064,6 +4176,7 @@ namespace AcqDataShow
                     value = 0;
                     return false;
             }
+            return true;
 
         }
         public bool SetParValue(string varName, int index, double value, out string errorInfo)
@@ -4390,6 +4503,7 @@ namespace AcqDataShow
                     return false;
             }
 
+            return true;
         }
 
         public double[] SawMarkDepthMin
@@ -4565,7 +4679,7 @@ namespace AcqDataShow
 
                 if (par.Station != StationType.SawMark)
                 {
-                    //LogHelper.ErrorLog("SawMarkAlgError: SetParams出错,工站名不匹配" + par.Station.ToString(), null);
+                    ////LogHelper.ErrorLog("SawMarkAlgError: SetParams出错,工站名不匹配" + par.Station.ToString(), null);
                     return false;
                 }
 
@@ -4599,7 +4713,7 @@ namespace AcqDataShow
                             }
                             else
                             {
-                                //LogHelper.InfoLog("SawMarkAlgWarn: SetParams报警,error input for" + param.parType.ToString() + ",value:" + param.parValue.ToString());
+                                ////LogHelper.InfoLog("SawMarkAlgWarn: SetParams报警,error input for" + param.parType.ToString() + ",value:" + param.parValue.ToString());
                             }
                             break;
 
@@ -4611,7 +4725,7 @@ namespace AcqDataShow
                             }
                             else
                             {
-                                //LogHelper.InfoLog("SawMarkAlgWarn: SetParams报警,error input for" + param.parType.ToString() + ",value:" + param.parValue.ToString());
+                                ////LogHelper.InfoLog("SawMarkAlgWarn: SetParams报警,error input for" + param.parType.ToString() + ",value:" + param.parValue.ToString());
                             }
                             break;
                         case ParType.Size:         // 尺寸
@@ -4622,7 +4736,7 @@ namespace AcqDataShow
                             }
                             else
                             {
-                                //LogHelper.InfoLog("SawMarkAlgWarn: SetParams报警,error input for" + param.parType.ToString() + ",value:" + param.parValue.ToString());
+                                ////LogHelper.InfoLog("SawMarkAlgWarn: SetParams报警,error input for" + param.parType.ToString() + ",value:" + param.parValue.ToString());
                             }
                             break;
                         case ParType.CutLength:    // 最小切割矩形长
@@ -4633,7 +4747,7 @@ namespace AcqDataShow
                             }
                             else
                             {
-                                //LogHelper.InfoLog("SawMarkAlgWarn: SetParams报警,error input for" + param.parType.ToString() + ",value:" + param.parValue.ToString());
+                                ////LogHelper.InfoLog("SawMarkAlgWarn: SetParams报警,error input for" + param.parType.ToString() + ",value:" + param.parValue.ToString());
                             }
                             break;
                         case ParType.CutWidth:    // 最小切割矩形宽
@@ -4644,7 +4758,7 @@ namespace AcqDataShow
                             }
                             else
                             {
-                                //LogHelper.InfoLog("SawMarkAlgWarn: SetParams报警,error input for" + param.parType.ToString() + ",value:" + param.parValue.ToString());
+                                ////LogHelper.InfoLog("SawMarkAlgWarn: SetParams报警,error input for" + param.parType.ToString() + ",value:" + param.parValue.ToString());
                             }
                             break;
                         default:
@@ -4666,7 +4780,7 @@ namespace AcqDataShow
 
                 if (!SawMarkCommInit(algoParamsForCPP, algoParamsForCPP.Length, errorInfoForCPP))
                 {
-                    //LogHelper.ErrorLog("SawMarkAlgError: SetParams出错,未知错误" + errorInfoForCPP.ToString(), null);
+                    ////LogHelper.ErrorLog("SawMarkAlgError: SetParams出错,未知错误" + errorInfoForCPP.ToString(), null);
                     return false;
                 }
 
@@ -4676,7 +4790,7 @@ namespace AcqDataShow
             }
             catch (Exception excep)
             {
-                //LogHelper.ErrorLog("SawMarkAlgError: SetParams出错,未知错误", excep);
+                ////LogHelper.ErrorLog("SawMarkAlgError: SetParams出错,未知错误", excep);
                 return false;
             }
         }
@@ -4930,7 +5044,7 @@ namespace AcqDataShow
             {
                 if ((null == thicknessDataIn) || (thicknessDataIn.GetLength(0) < 3) || (thicknessDataIn.GetLength(1) <= 0))
                 {
-                    //LogHelper.ErrorLog("SawMarkAlgError: SetThicknessOfEachProbePair 出错,error input", null);
+                    ////LogHelper.ErrorLog("SawMarkAlgError: SetThicknessOfEachProbePair 出错,error input", null);
                     return false;
                 }
                 int numMeasurePos = thicknessDataIn.GetLength(1);
@@ -4949,7 +5063,7 @@ namespace AcqDataShow
             }
             catch (Exception excep)
             {
-                //LogHelper.ErrorLog("SawMarkAlgError: SetThicknessOfAllProbePairs 出错,未知错误", excep);
+                ////LogHelper.ErrorLog("SawMarkAlgError: SetThicknessOfAllProbePairs 出错,未知错误", excep);
                 return false;
             }
         }
@@ -4959,7 +5073,7 @@ namespace AcqDataShow
             {
                 if ((null == dataShowIn) || (dataShowIn.GetLength(0) < 6) || (dataShowIn.GetLength(1) <= 0) || (waferSizeIn <= 0))
                 {
-                    //LogHelper.ErrorLog("SawMarkAlgError: SetSurfaceDataOfAllProbes 出错,error input", null);
+                    ////LogHelper.ErrorLog("SawMarkAlgError: SetSurfaceDataOfAllProbes 出错,error input", null);
                     return false;
                 }
 
@@ -4997,7 +5111,7 @@ namespace AcqDataShow
             }
             catch (Exception excep)
             {
-                //LogHelper.ErrorLog("SawMarkAlgError: SetSurfaceDataOfEachProbePair 出错,未知错误", excep);
+                ////LogHelper.ErrorLog("SawMarkAlgError: SetSurfaceDataOfEachProbePair 出错,未知错误", excep);
                 return false;
             }
         }
@@ -5007,7 +5121,7 @@ namespace AcqDataShow
             {
                 if ((null == sawMarkDatasIn) || (sawMarkDatasIn.Length < sawMarkNumIn) || (sawMarkNumIn < 0))
                 {
-                    //LogHelper.ErrorLog("SawMarkAlgError: SetSawMarkPositionOfAllProbes 出错,error input", null);
+                    ////LogHelper.ErrorLog("SawMarkAlgError: SetSawMarkPositionOfAllProbes 出错,error input", null);
                     return false;
                 }
 
@@ -5240,7 +5354,7 @@ namespace AcqDataShow
             }
             catch (Exception excep)
             {
-                //LogHelper.ErrorLog("SawMarkAlgError: SetSurfaceDataOfEachProbePair 出错,未知错误", excep);
+                ////LogHelper.ErrorLog("SawMarkAlgError: SetSurfaceDataOfEachProbePair 出错,未知错误", excep);
                 return false;
             }
 
@@ -5287,7 +5401,7 @@ namespace AcqDataShow
         {
             if (ListSpecNameToParam == null)
             {
-                //LogHelper.ErrorLog("SawMarkAlgError: AddSpecName 出错; error at AddSpecName,ListSpecNameToParam is null", null);
+                ////LogHelper.ErrorLog("SawMarkAlgError: AddSpecName 出错; error at AddSpecName,ListSpecNameToParam is null", null);
                 return false;
             }
             if ((null != specName) && ("" != specName) && (null != paramFileName))
@@ -5320,19 +5434,19 @@ namespace AcqDataShow
                     return true;
                 }
             }
-            return false;
+            return true;
         }
         public bool GetParamFileName(string specName, out string paramFileName)
         {
             paramFileName = "default_AlgoParams.xml";
             if ((ListSpecNameToParam == null))
             {
-                //LogHelper.ErrorLog("SawMarkAlgError: GetParamFileName 出错,ListSpecNameToParam is null", null);
+                ////LogHelper.ErrorLog("SawMarkAlgError: GetParamFileName 出错,ListSpecNameToParam is null", null);
                 return false;
             }
             if (!InListSpecName(specName))
             {
-                //LogHelper.ErrorLog("SawMarkAlgError: GetParamFileName 出错,specName is not in ListSpecNameToParam", null);
+                ////LogHelper.ErrorLog("SawMarkAlgError: GetParamFileName 出错,specName is not in ListSpecNameToParam", null);
                 return false;
             }
             foreach (SpecNameToAlgoParamFile linkI in ListSpecNameToParam)
@@ -5349,17 +5463,17 @@ namespace AcqDataShow
         {
             if (ListSpecNameToParam == null)
             {
-                //LogHelper.ErrorLog("SawMarkAlgError: GetParamFileName 出错,ListSpecNameToParam is null", null);
+                ////LogHelper.ErrorLog("SawMarkAlgError: GetParamFileName 出错,ListSpecNameToParam is null", null);
                 return false;
             }
             if ((null == specName) || ("" == specName))
             {
-                //LogHelper.ErrorLog("SawMarkAlgError: GetParamFileName 出错,specNmae is null or empty", null);
+                ////LogHelper.ErrorLog("SawMarkAlgError: GetParamFileName 出错,specNmae is null or empty", null);
                 return false;
             }
             if (!InListSpecName(specName))
             {
-                //LogHelper.ErrorLog("SawMarkAlgError: GetParamFileName 出错,specName is not in ListSpecNameToParam", null);
+                ////LogHelper.ErrorLog("SawMarkAlgError: GetParamFileName 出错,specName is not in ListSpecNameToParam", null);
                 return false;
             }
             if (CurrentSpecName == specName)

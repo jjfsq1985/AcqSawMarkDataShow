@@ -38,7 +38,6 @@
             this.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Name = "LineGraph";
             this.Size = new System.Drawing.Size(288, 259);
-            this.Load += new System.EventHandler(this.LineGraph_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.LineGraph_Paint);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.LineGraph_KeyDown);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.LineGraph_KeyPress);
